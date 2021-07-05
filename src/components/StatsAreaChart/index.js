@@ -1,10 +1,10 @@
 /* eslint-disable */
 
 import {Component} from 'react'
-import {LineChart, Line, XAxis, YAxis, Tooltip} from 'recharts'
+import {AreaChart, Area, XAxis, YAxis, Tooltip} from 'recharts'
 import './index.css'
 
-class StatsLineChart extends Component {
+class StatsAreaChart extends Component {
   state = {datewiseData: [], isLoading: true}
 
   componentDidMount() {
@@ -33,7 +33,7 @@ class StatsLineChart extends Component {
       'positivityRatio',
     ]
 
-    const lineChartData = []
+    const areaChartData = []
 
     for (const title of chartTitles) {
       const crunchedData = {color: '', bgColor: '', title: '', datesData: []}
@@ -42,13 +42,13 @@ class StatsLineChart extends Component {
         for (const key in lastNinetyDaysData[count]) {
           countObj.date = key
 
-          const confirmedCases = lastNinetyDaysData[count][key].total.confirmed
-          const recoveredCases = lastNinetyDaysData[count][key].total.recovered
-          const deceasedCases = lastNinetyDaysData[count][key].total.deceased
+          const confirmedCases = lastNinetyDaysData[count][key].delta.confirmed
+          const recoveredCases = lastNinetyDaysData[count][key].delta.recovered
+          const deceasedCases = lastNinetyDaysData[count][key].delta.deceased
           const vaccinated1Cases =
-            lastNinetyDaysData[count][key].total.vaccinated1
+            lastNinetyDaysData[count][key].delta.vaccinated1
           const vaccinated2Cases =
-            lastNinetyDaysData[count][key].total.vaccinated2
+            lastNinetyDaysData[count][key].delta.vaccinated2
           const testedCases = lastNinetyDaysData[count][key].total.tested
 
           if (title === 'active') {
@@ -94,10 +94,10 @@ class StatsLineChart extends Component {
       for (const obj of crunchedData.datesData) {
         obj.date = this.formatDate(obj.date)
       }
-      lineChartData.push(crunchedData)
+      areaChartData.push(crunchedData)
     }
 
-    this.setState({datewiseData: lineChartData, isLoading: false})
+    this.setState({datewiseData: areaChartData, isLoading: false})
   }
 
   formatDate = date => {
@@ -123,6 +123,10 @@ class StatsLineChart extends Component {
   formatCount = count => {
     if (count / 1000 >= 100) {
       return `${(count / 1000 / 100).toFixed(2)} L`
+    } else if (count < 1000) {
+      return count
+    } else if (count < 1) {
+      return count.toFixed(2)
     } else {
       return `${(count / 1000).toFixed(2)} k`
     }
@@ -136,11 +140,11 @@ class StatsLineChart extends Component {
     }
   }
 
-  renderLineChart = (chartData, color, bgColor, title) => {
+  renderAreaChart = (chartData, color, bgColor, title) => {
     return (
-      <div className="line-chart-container" style={{background: bgColor}}>
+      <div className="area-chart-container" style={{background: bgColor}}>
         <p style={{color: color, textAlign: 'right'}}>{title}</p>
-        <LineChart
+        <AreaChart
           width={1000}
           height={300}
           data={chartData}
@@ -167,9 +171,9 @@ class StatsLineChart extends Component {
           <Tooltip
             formatter={title !== 'Positivity Ratio' && this.formatCount}
           />
-          <Line type="basis" stroke="#8884d8" activeDot={false} dot={false} />
-          <Line type="basis" dataKey="count" stroke={color} dot={false} />
-        </LineChart>
+          <Area type="monotone" stroke={color} activeDot={{r: 8}} />
+          <Area type="monotone" dataKey="count" stroke="none" fill={color} />
+        </AreaChart>
       </div>
     )
   }
@@ -180,7 +184,7 @@ class StatsLineChart extends Component {
     return (
       <div>
         {datewiseData.map(eachData =>
-          this.renderLineChart(
+          this.renderAreaChart(
             eachData.datesData,
             eachData.color,
             eachData.bgColor,
@@ -192,4 +196,4 @@ class StatsLineChart extends Component {
   }
 }
 
-export default StatsLineChart
+export default StatsAreaChart

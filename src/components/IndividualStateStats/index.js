@@ -5,6 +5,7 @@ import Loader from 'react-loader-spinner'
 import ConsolidatedStats from '../ConsolidatedStats'
 import StatsBarChart from '../StatsBarChart'
 import StatsLineChart from '../StatsLineChart'
+import StatsAreaChart from '../StatsAreaChart'
 import './index.css'
 
 class IndividualStateStats extends Component {
@@ -12,6 +13,7 @@ class IndividualStateStats extends Component {
     stateData: {},
     isLoading: true,
     activeTab: 'Active',
+    showCumulativeChart: true,
   }
 
   componentDidMount() {
@@ -38,6 +40,26 @@ class IndividualStateStats extends Component {
     return state.state_name
   }
 
+  formatDate = date => {
+    const dateArray = date.split('-')
+    const months = {
+      '01': 'Jan',
+      '02': 'Jan',
+      '03': 'Mar',
+      '04': 'Apr',
+      '05': 'May',
+      '06': 'Jun',
+      '07': 'Jul',
+      '08': 'Aug',
+      '09': 'Sep',
+      10: 'Oct',
+      11: 'Nov',
+      12: 'Dec',
+    }
+
+    return dateArray[2] + ' ' + months[dateArray[1]] + ' ' + dateArray[0]
+  }
+
   getUpdatedDate = stateData => {
     const updatedStatesData = {
       date: stateData.meta.date,
@@ -47,7 +69,7 @@ class IndividualStateStats extends Component {
     }
 
     const {lastUpdated} = updatedStatesData
-    return lastUpdated
+    return this.formatDate(lastUpdated.split('T')[0])
   }
 
   getStateStatsCount = stateData => ({
@@ -110,12 +132,87 @@ class IndividualStateStats extends Component {
     return topDistricts
   }
 
+  cumulativeClicked = () => {
+    this.setState({showCumulativeChart: true})
+  }
+
+  dailyClicked = () => {
+    this.setState({showCumulativeChart: false})
+  }
+
+  renderHeaderContainer = (statesList, stateCode, stateData) => (
+    <div className="individual-state-stats-heading-container">
+      <div>
+        <span className="individual-state-stats-heading">
+          {this.getStateName(stateCode, statesList)}
+        </span>
+        <p className="individual-state-stats-date">
+          Last update on {this.getUpdatedDate(stateData)}
+        </p>
+      </div>
+      <div className="individual-state-stats-tested-container">
+        <span className="individual-state-stats-tested">Tested</span>
+        <span className="individual-state-stats-tested-count">
+          {stateData.total.tested}
+        </span>
+      </div>
+    </div>
+  )
+
+  renderTopDistrictsContainer = activeTab => (
+    <div>
+      <h1
+        className={`individual-state-top-districts ${this.getHexCode(
+          activeTab,
+        )}`}
+      >
+        Top Districts
+      </h1>
+      <div className="individual-state-top-districts-container">
+        {this.getTopDistricts(activeTab).map(eachDistrict => (
+          <p key={eachDistrict.name}>
+            <span className="individual-state-top-districts-count">
+              {eachDistrict.cases}
+            </span>
+            <span>{eachDistrict.name}</span>
+          </p>
+        ))}
+      </div>
+    </div>
+  )
+
+  renderSpreadTrendsContainer = (showCumulativeChart, stateCode) => (
+    <div>
+      <h1 className="individual-state-spread-trends-heading">Spread Trends</h1>
+      <button
+        onClick={this.cumulativeClicked}
+        className={`individual-state-spread-trends-button ${
+          !showCumulativeChart &&
+          'individual-state-spread-trends-button-inactive'
+        }`}
+      >
+        Cumulative
+      </button>
+      <button
+        onClick={this.dailyClicked}
+        className={`individual-state-spread-trends-button ${
+          showCumulativeChart &&
+          'individual-state-spread-trends-button-inactive'
+        }`}
+      >
+        Daily
+      </button>
+      {showCumulativeChart && <StatsLineChart stateCode={stateCode} />}
+      {!showCumulativeChart && <StatsAreaChart stateCode={stateCode} />}
+    </div>
+  )
+
   render() {
     const {match, statesList} = this.props
     const {params} = match
     const {stateCode} = params
 
-    const {stateData, isLoading, activeTab} = this.state
+    const {stateData, isLoading, activeTab, showCumulativeChart} = this.state
 
     return (
       <div>
@@ -123,59 +220,15 @@ class IndividualStateStats extends Component {
           <Loader type="TailSpin" color="#007bff" height={50} width={50} />
         ) : (
           <div className="individual-state-stats-bg-container">
-            <div className="individual-state-stats-heading-container">
-              <div>
-                <span className="individual-state-stats-heading">
-                  {this.getStateName(stateCode, statesList)}
-                </span>
-                <p className="individual-state-stats-date">
-                  Last update on {this.getUpdatedDate(stateData)}
-                </p>
-              </div>
-              <div className="individual-state-stats-tested-container">
-                <span className="individual-state-stats-tested">Tested</span>
-                <span className="individual-state-stats-tested-count">
-                  {stateData.total.tested}
-                </span>
-              </div>
-            </div>
+            {this.renderHeaderContainer(statesList, stateCode, stateData)}
             <ConsolidatedStats
               indiaStatsCount={this.getStateStatsCount(stateData)}
               statsTabClicked={this.statsTabClicked}
               activeTab={activeTab}
             />
-            <div>
-              <h1
-                className={`individual-state-top-districts ${this.getHexCode(
-                  activeTab,
-                )}`}
-              >
-                Top Districts
-              </h1>
-              <div className="individual-state-top-districts-container">
-                {this.getTopDistricts(activeTab).map(eachDistrict => (
-                  <p key={eachDistrict.name}>
-                    <span className="individual-state-top-districts-count">
-                      {eachDistrict.cases}
-                    </span>
-                    <span>{eachDistrict.name}</span>
-                  </p>
-                ))}
-              </div>
-            </div>
+            {this.renderTopDistrictsContainer(activeTab)}
             <StatsBarChart activeTab={activeTab} stateCode={stateCode} />
-            <div>
-              <h1 className="individual-state-spread-trends-heading">
-                Spread Trends
-              </h1>
-              <button className="individual-state-spread-trends-button">
-                Cumulative
-              </button>
-              <button className="individual-state-spread-trends-button">
-                Daily
-              </button>
-              <StatsLineChart stateCode={stateCode} />
-            </div>
+            {this.renderSpreadTrendsContainer(showCumulativeChart, stateCode)}
           </div>
         )}
       </div>

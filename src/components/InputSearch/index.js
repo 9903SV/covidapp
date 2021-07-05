@@ -8,7 +8,12 @@ class InputSearch extends Component {
 
   inputChanged = event => {
     const {statesList} = this.props
-    const inputText = event.target.value
+    let inputText = ''
+    if (event.target.value === '') {
+      inputText = '@'
+    } else {
+      inputText = event.target.value
+    }
 
     const updatedStatesList = statesList.filter(eachState =>
       eachState.state_name.toLowerCase().includes(inputText.toLowerCase()),

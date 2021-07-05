@@ -1,18 +1,7 @@
 /* eslint-disable */
 
 import {Component} from 'react'
-import {
-  BarChart,
-  Bar,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  LabelList,
-} from 'recharts'
+import {BarChart, Bar, XAxis, YAxis, Tooltip, LabelList} from 'recharts'
 import './index.css'
 
 class StatsBarChart extends Component {
@@ -67,7 +56,6 @@ class StatsBarChart extends Component {
 
   formatDate = date => {
     const dateArray = date.split('-')
-    // console.log(dateArray)
     const months = {
       '01': 'Jan',
       '02': 'Jan',
@@ -88,9 +76,11 @@ class StatsBarChart extends Component {
 
   formatCount = count => {
     if (count / 1000 >= 100) {
-      return `${count / 1000 / 100} L`
+      return `${(count / 1000 / 100).toFixed(2)} L`
+    } else if (count < 1000) {
+      return count
     } else {
-      return `${count / 1000} k`
+      return `${(count / 1000).toFixed(2)} k`
     }
   }
 
@@ -110,25 +100,34 @@ class StatsBarChart extends Component {
   render() {
     const {datewiseData, isLoading} = this.state
     const {activeTab, hexCode} = this.props
-    console.log(datewiseData)
 
     return (
       <div>
         {!isLoading && (
           <div className="bar-chart-container">
             <BarChart
-              width={700}
-              height={300}
+              width={1000}
+              height={350}
               data={datewiseData}
               tickLine={false}
             >
               <XAxis dataKey="date" axisLine={false} tickLine={false} />
-              <YAxis axisLine={false} tickLine={false} tick={false} />
+              <YAxis
+                label={this.formatCount}
+                axisLine={false}
+                tickLine={false}
+                tick={false}
+              />
+              <Tooltip
+                cursor={{fill: 'transparent'}}
+                formatter={this.formatCount}
+              />
               <Bar dataKey="count" fill={this.getHexCode(activeTab)}>
                 <LabelList
                   dataKey="count"
                   position="top"
                   fill={this.getHexCode(activeTab)}
+                  formatter={this.formatCount}
                 />
               </Bar>
             </BarChart>

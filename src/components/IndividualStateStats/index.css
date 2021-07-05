@@ -22,6 +22,7 @@
 .individual-state-stats-date {
   font: normal normal 12px/18px Roboto;
   color: #cbd5e1;
+  margin-left: 16px;
 }
 
 .individual-state-stats-tested-container {
@@ -68,4 +69,8 @@
   color: #cbd5e1;
   margin: 16px 2px;
   border-radius: 4px;
+}
+
+.individual-state-spread-trends-button-inactive {
+  opacity: 0.5;
 }
