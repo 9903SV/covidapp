@@ -1,0 +1,27 @@
+.input-search-bg-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-search-container {
+  display: flex;
+  align-items: center;
+  background: #2f2f43;
+  border-radius: 4px;
+  padding: 0px 16px;
+  width: 60%;
+}
+
+.input-search-icon {
+  color: #94a3b8;
+  margin: 16px;
+}
+
+.input-search-text {
+  color: #64748b;
+  margin: 16px;
+  background-color: transparent;
+  border-style: none;
+  outline: none;
+}

@@ -1,0 +1,21 @@
+.pagenotfound-bg-container {
+  background-color: #161625;
+  color: #f8fafc;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagenotfound-description {
+  text-align: center;
+}
+
+.pagenotfound-button {
+  color: #f8fafc;
+  background-color: #007bff;
+  padding: 10px 14px;
+  border-radius: 4px;
+  border-style: none;
+}

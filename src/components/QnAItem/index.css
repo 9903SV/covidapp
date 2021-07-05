@@ -1,0 +1,9 @@
+.qna-question {
+  font: normal normal 14px/24px Roboto;
+  color: #94a3b8;
+}
+
+.qna-answer {
+  font: normal 500 14px/32px Roboto;
+  color: #007bff;
+}

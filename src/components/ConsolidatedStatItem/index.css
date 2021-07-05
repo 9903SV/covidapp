@@ -1,0 +1,47 @@
+.stat-container {
+  text-align: center;
+  padding: 16px 32px;
+  border-radius: 6px;
+}
+
+.stat-image {
+  width: 25px;
+  height: 25px;
+}
+
+.stat-count {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.confirmed-hex-code {
+  color: #ff073a;
+}
+
+.active-hex-code {
+  color: #007bff;
+}
+
+.recovered-hex-code {
+  color: #28a745;
+}
+
+.deceased-hex-code {
+  color: #6c757d;
+}
+
+.confirmed-bg-color {
+  background-color: #331427;
+}
+
+.active-bg-color {
+  background-color: #132240;
+}
+
+.recovered-bg-color {
+  background-color: #182829;
+}
+
+.deceased-bg-color {
+  background-color: #212230;
+}

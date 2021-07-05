@@ -1,0 +1,7 @@
+.home-bg-container {
+  background-color: #161625;
+  min-height: 90vh;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+}

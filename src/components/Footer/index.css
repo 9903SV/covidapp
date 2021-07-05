@@ -1,0 +1,22 @@
+.footer-bg-container {
+  background-color: #161625;
+  text-align: center;
+  color: #f8fafc;
+  padding: 16px;
+}
+
+.footer-heading {
+  font: normal normal 20px/24px Bree Serif;
+  text-align: center;
+  text-decoration: none;
+}
+
+.footer-heading-highlight {
+  color: #007bff;
+}
+
+.footer-icon {
+  font-size: 32px;
+  margin: 8px 16px;
+  color: #f8fafc;
+}

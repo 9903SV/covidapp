@@ -1,0 +1,39 @@
+.state-suggestion-container {
+  background-color: #161625;
+  padding: 16px;
+  text-decoration: none;
+  width: 60%;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 8px;
+  align-items: center;
+}
+
+.state-suggestion-container:hover {
+  background-color: #2f2f43;
+}
+
+.state-suggestion-name {
+  font: normal normal 16px/24px Roboto;
+  color: #64748b;
+  text-decoration: none;
+}
+
+.state-suggestion-button {
+  background-color: rgba(28, 212, 212, 0.16);
+  border-radius: 4px;
+  font: normal 600 12px/12px HK Grotesk;
+  color: #facc15;
+  margin: 0px 16px;
+  border-style: none;
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.state-suggestion-icon {
+  color: #facc15;
+  border: 1px solid #facc15;
+  border-radius: 4px;
+  margin: 8px;
+}
