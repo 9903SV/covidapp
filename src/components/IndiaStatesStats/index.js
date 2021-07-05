@@ -1,5 +1,6 @@
 import {Component} from 'react'
 import Loader from 'react-loader-spinner'
+import {Link} from 'react-router-dom'
 import './index.css'
 
 class IndiaStatesStats extends Component {
@@ -44,31 +45,36 @@ class IndiaStatesStats extends Component {
   renderTableData = (statesList, statesStats) => (
     <div>
       {statesList.map(eachState => (
-        <div
-          className="states-stats-count-container"
-          key={eachState.state_code}
+        <Link
+          to={`state/${eachState.state_code}`}
+          style={{textDecoration: 'none'}}
         >
-          <span className="states-stats-state-name">
-            {eachState.state_name}
-          </span>
-          <span className="confirmed-hex-code stats-count-width">
-            {statesStats[eachState.state_code].total.confirmed}
-          </span>
-          <span className="active-hex-code stats-count-width">
-            {statesStats[eachState.state_code].total.confirmed -
-              (statesStats[eachState.state_code].total.recovered +
-                statesStats[eachState.state_code].total.deceased)}
-          </span>
-          <span className="recovered-hex-code stats-count-width">
-            {statesStats[eachState.state_code].total.recovered}
-          </span>
-          <span className="deceased-hex-code stats-count-width">
-            {statesStats[eachState.state_code].total.deceased}
-          </span>
-          <span className="population-hex-code stats-count-width">
-            {statesStats[eachState.state_code].meta.population}
-          </span>
-        </div>
+          <div
+            className="states-stats-count-container"
+            key={eachState.state_code}
+          >
+            <span className="states-stats-state-name">
+              {eachState.state_name}
+            </span>
+            <span className="confirmed-hex-code stats-count-width">
+              {statesStats[eachState.state_code].total.confirmed}
+            </span>
+            <span className="active-hex-code stats-count-width">
+              {statesStats[eachState.state_code].total.confirmed -
+                (statesStats[eachState.state_code].total.recovered +
+                  statesStats[eachState.state_code].total.deceased)}
+            </span>
+            <span className="recovered-hex-code stats-count-width">
+              {statesStats[eachState.state_code].total.recovered}
+            </span>
+            <span className="deceased-hex-code stats-count-width">
+              {statesStats[eachState.state_code].total.deceased}
+            </span>
+            <span className="population-hex-code stats-count-width">
+              {statesStats[eachState.state_code].meta.population}
+            </span>
+          </div>
+        </Link>
       ))}
     </div>
   )
