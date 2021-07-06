@@ -135,6 +135,8 @@ class StatsAreaChart extends Component {
   formatTickCounter = count => {
     if (count / 1000 >= 100) {
       return `${count / 1000 / 100} L`
+    } else if (count < 1000) {
+      return count
     } else {
       return `${count / 1000} k`
     }
