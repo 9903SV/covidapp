@@ -21,18 +21,22 @@ class IndividualStateStats extends Component {
   }
 
   getStateStats = async () => {
-    const {match} = this.props
-    const {params} = match
-    const {stateCode} = params
+    try {
+      const {match} = this.props
+      const {params} = match
+      const {stateCode} = params
 
-    const response = await fetch(
-      'https://api.covid19india.org/v4/min/data.min.json',
-    )
-    const data = await response.json()
+      const response = await fetch(
+        'https://api.covid19india.org/v4/min/data.min.json',
+      )
+      const data = await response.json()
 
-    const stateData = data[stateCode]
+      const stateData = data[stateCode]
 
-    this.setState({stateData: stateData, isLoading: false})
+      this.setState({stateData: stateData, isLoading: false})
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   getStateName = (code, list) => {
@@ -132,11 +136,11 @@ class IndividualStateStats extends Component {
     return topDistricts
   }
 
-  cumulativeClicked = () => {
+  showCumulativeCharts = () => {
     this.setState({showCumulativeChart: true})
   }
 
-  dailyClicked = () => {
+  showDailyCharts = () => {
     this.setState({showCumulativeChart: false})
   }
 
@@ -185,7 +189,7 @@ class IndividualStateStats extends Component {
     <div>
       <h1 className="individual-state-spread-trends-heading">Spread Trends</h1>
       <button
-        onClick={this.cumulativeClicked}
+        onClick={this.showCumulativeCharts}
         className={`individual-state-spread-trends-button ${
           !showCumulativeChart &&
           'individual-state-spread-trends-button-inactive'
@@ -194,7 +198,7 @@ class IndividualStateStats extends Component {
         Cumulative
       </button>
       <button
-        onClick={this.dailyClicked}
+        onClick={this.showDailyCharts}
         className={`individual-state-spread-trends-button ${
           showCumulativeChart &&
           'individual-state-spread-trends-button-inactive'
@@ -217,7 +221,9 @@ class IndividualStateStats extends Component {
     return (
       <div>
         {isLoading ? (
-          <Loader type="TailSpin" color="#007bff" height={50} width={50} />
+          <div className="loader-container">
+            <Loader type="TailSpin" color="#007bff" height={50} width={50} />
+          </div>
         ) : (
           <div className="individual-state-stats-bg-container">
             {this.renderHeaderContainer(statesList, stateCode, stateData)}

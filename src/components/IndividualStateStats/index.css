@@ -1,3 +1,9 @@
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .individual-state-stats-bg-container {
   background-color: #161625;
   min-height: 90vh;

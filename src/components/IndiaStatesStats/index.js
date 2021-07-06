@@ -11,12 +11,16 @@ class IndiaStatesStats extends Component {
   }
 
   getStatesStats = async () => {
-    const response = await fetch(
-      'https://api.covid19india.org/v4/min/data.min.json',
-    )
-    const data = await response.json()
+    try {
+      const response = await fetch(
+        'https://api.covid19india.org/v4/min/data.min.json',
+      )
+      const data = await response.json()
 
-    this.setState({statesStats: data, isLoading: false})
+      this.setState({statesStats: data, isLoading: false})
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   renderTableHeader = () => (
@@ -48,6 +52,7 @@ class IndiaStatesStats extends Component {
         <Link
           to={`state/${eachState.state_code}`}
           style={{textDecoration: 'none'}}
+          key={eachState.state_code}
         >
           <div
             className="states-stats-count-container"
@@ -86,7 +91,9 @@ class IndiaStatesStats extends Component {
     return (
       <div>
         {isLoading ? (
-          <Loader type="TailSpin" color="#007bff" height={50} width={50} />
+          <div className="loader-container">
+            <Loader type="TailSpin" color="#007bff" height={50} width={50} />
+          </div>
         ) : (
           <div className="states-stats-bg-container">
             {this.renderTableHeader()}

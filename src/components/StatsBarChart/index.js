@@ -18,40 +18,44 @@ class StatsBarChart extends Component {
   }
 
   getDatewiseData = async () => {
-    const {activeTab, stateCode} = this.props
+    try {
+      const {activeTab, stateCode} = this.props
 
-    const response = await fetch(
-      'https://api.covid19india.org/v4/min/timeseries.min.json',
-    )
-    const data = await response.json()
+      const response = await fetch(
+        'https://api.covid19india.org/v4/min/timeseries.min.json',
+      )
+      const data = await response.json()
 
-    let lastTenDaysData = Object.keys(data[stateCode].dates)
-      .slice(-10)
-      .map(key => ({[key]: data[stateCode].dates[key]}))
+      let lastTenDaysData = Object.keys(data[stateCode].dates)
+        .slice(-10)
+        .map(key => ({[key]: data[stateCode].dates[key]}))
 
-    const crunchedData = []
-    for (let count = 0; count < 10; count += 1) {
-      let countObj = {}
-      for (const key in lastTenDaysData[count]) {
-        countObj.date = key
-        if (activeTab === 'Active') {
-          countObj.count =
-            lastTenDaysData[count][key].total.confirmed -
-            (lastTenDaysData[count][key].total.recovered +
-              lastTenDaysData[count][key].total.deceased)
-        } else {
-          countObj.count =
-            lastTenDaysData[count][key].total[activeTab.toLowerCase()]
+      const crunchedData = []
+      for (let count = 0; count < 10; count += 1) {
+        let countObj = {}
+        for (const key in lastTenDaysData[count]) {
+          countObj.date = key
+          if (activeTab === 'Active') {
+            countObj.count =
+              lastTenDaysData[count][key].total.confirmed -
+              (lastTenDaysData[count][key].total.recovered +
+                lastTenDaysData[count][key].total.deceased)
+          } else {
+            countObj.count =
+              lastTenDaysData[count][key].total[activeTab.toLowerCase()]
+          }
+          crunchedData.push(countObj)
         }
-        crunchedData.push(countObj)
       }
-    }
 
-    for (const obj of crunchedData) {
-      obj.date = this.formatDate(obj.date)
-    }
+      for (const obj of crunchedData) {
+        obj.date = this.formatDate(obj.date)
+      }
 
-    this.setState({datewiseData: crunchedData, isLoading: false})
+      this.setState({datewiseData: crunchedData, isLoading: false})
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   formatDate = date => {

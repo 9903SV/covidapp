@@ -12,12 +12,16 @@ class About extends Component {
   }
 
   getQuestionsList = async () => {
-    const response = await fetch(
-      'https://api.covid19india.org/website_data.json',
-    )
-    const data = await response.json()
+    try {
+      const response = await fetch(
+        'https://api.covid19india.org/website_data.json',
+      )
+      const data = await response.json()
 
-    this.setState({questionsList: data.faq, isLoading: false})
+      this.setState({questionsList: data.faq, isLoading: false})
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   render() {

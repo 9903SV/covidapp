@@ -1,3 +1,9 @@
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .states-stats-bg-container {
   background: #1e1e30;
   border: 1px solid #475569;

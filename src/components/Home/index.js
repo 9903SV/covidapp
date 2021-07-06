@@ -14,20 +14,24 @@ class Home extends Component {
   }
 
   getCovidStats = async () => {
-    const {statesList} = this.props
-    const response = await fetch(
-      'https://api.covid19india.org/v4/min/data.min.json',
-    )
-    const data = await response.json()
+    try {
+      const {statesList} = this.props
+      const response = await fetch(
+        'https://api.covid19india.org/v4/min/data.min.json',
+      )
+      const data = await response.json()
 
-    this.setState({
-      indiaStatsCount: this.getIndiaStatsCount(data, statesList),
-      isLoading: false,
-    })
+      this.setState({
+        indiaStatsCount: this.getIndiaStatsCount(data, statesList),
+        isLoading: false,
+      })
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   getIndiaStatsCount = (data, statesList) => {
-    const indiaStatsCount = {
+    let indiaStatsCount = {
       Confirmed: 0,
       Active: 0,
       Recovered: 0,
@@ -36,10 +40,14 @@ class Home extends Component {
 
     statesList.forEach(eachState => {
       const stateCode = eachState.state_code
-      indiaStatsCount.Confirmed += data[stateCode].total.confirmed
-      indiaStatsCount.Recovered += data[stateCode].total.recovered
-      indiaStatsCount.Deceased += data[stateCode].total.deceased
+      indiaStatsCount = {
+        ...indiaStatsCount,
+        Confirmed: indiaStatsCount.Confirmed + data[stateCode].total.confirmed,
+        Recovered: indiaStatsCount.Recovered + data[stateCode].total.recovered,
+        Deceased: indiaStatsCount.Deceased + data[stateCode].total.deceased,
+      }
     })
+
     indiaStatsCount.Active +=
       indiaStatsCount.Confirmed -
       (indiaStatsCount.Recovered + indiaStatsCount.Deceased)
@@ -57,7 +65,9 @@ class Home extends Component {
       <div className="home-bg-container">
         <InputSearch statesList={statesList} />
         {isLoading ? (
-          <Loader type="TailSpin" color="#007bff" height={50} width={50} />
+          <div className="loader-container">
+            <Loader type="TailSpin" color="#007bff" height={50} width={50} />
+          </div>
         ) : (
           <div>
             <ConsolidatedStats
