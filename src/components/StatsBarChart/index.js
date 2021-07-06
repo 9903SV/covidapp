@@ -5,7 +5,7 @@ import {BarChart, Bar, XAxis, YAxis, Tooltip, LabelList} from 'recharts'
 import './index.css'
 
 class StatsBarChart extends Component {
-  state = {datewiseData: [], isLoading: true}
+  state = {datewiseData: [], isLoading: false}
 
   componentDidMount() {
     this.getDatewiseData()
@@ -19,6 +19,7 @@ class StatsBarChart extends Component {
 
   getDatewiseData = async () => {
     try {
+      this.setState({isLoading: true})
       const {activeTab, stateCode} = this.props
 
       const response = await fetch(

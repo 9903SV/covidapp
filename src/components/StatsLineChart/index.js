@@ -6,7 +6,7 @@ import Loader from 'react-loader-spinner'
 import './index.css'
 
 class StatsLineChart extends Component {
-  state = {datewiseData: [], isLoading: true}
+  state = {datewiseData: [], isLoading: false}
 
   componentDidMount() {
     this.getDatewiseData()
@@ -14,6 +14,7 @@ class StatsLineChart extends Component {
 
   getDatewiseData = async () => {
     try {
+      this.setState({isLoading: true})
       const {stateCode} = this.props
 
       const response = await fetch(
@@ -190,6 +191,7 @@ class StatsLineChart extends Component {
           />
           <Tooltip
             formatter={chartTitle !== 'Positivity Ratio' && this.formatCount}
+            cursor={false}
           />
           <Line type="basis" stroke="#8884d8" activeDot={false} dot={false} />
           <Line type="basis" dataKey="count" stroke={color} dot={false} />

@@ -7,7 +7,7 @@ import Footer from '../Footer'
 import './index.css'
 
 class Home extends Component {
-  state = {indiaStatsCount: {}, isLoading: true}
+  state = {indiaStatsCount: {}, isLoading: false}
 
   componentDidMount() {
     this.getCovidStats()
@@ -15,6 +15,7 @@ class Home extends Component {
 
   getCovidStats = async () => {
     try {
+      this.setState({isLoading: true})
       const {statesList} = this.props
       const response = await fetch(
         'https://api.covid19india.org/v4/min/data.min.json',

@@ -10,8 +10,8 @@ import './index.css'
 
 class IndividualStateStats extends Component {
   state = {
-    stateData: {},
-    isLoading: true,
+    stateData: null,
+    isLoading: false,
     activeTab: 'Active',
     showCumulativeChart: true,
   }
@@ -22,6 +22,7 @@ class IndividualStateStats extends Component {
 
   getStateStats = async () => {
     try {
+      this.setState({isLoading: true})
       const {match} = this.props
       const {params} = match
       const {stateCode} = params
@@ -65,15 +66,17 @@ class IndividualStateStats extends Component {
   }
 
   getUpdatedDate = stateData => {
-    const updatedStatesData = {
-      date: stateData.meta.date,
-      lastUpdated: stateData.meta.last_updated,
-      population: stateData.meta.population,
-      tested: stateData.meta.tested,
-    }
+    if (stateData !== null) {
+      const updatedStatesData = {
+        date: stateData.meta.date,
+        lastUpdated: stateData.meta.last_updated,
+        population: stateData.meta.population,
+        tested: stateData.meta.tested,
+      }
 
-    const {lastUpdated} = updatedStatesData
-    return this.formatDate(lastUpdated.split('T')[0])
+      const {lastUpdated} = updatedStatesData
+      return this.formatDate(lastUpdated.split('T')[0])
+    }
   }
 
   getStateStatsCount = stateData => ({
@@ -220,7 +223,7 @@ class IndividualStateStats extends Component {
 
     return (
       <div>
-        {isLoading ? (
+        {isLoading || stateData === null ? (
           <div className="loader-container">
             <Loader type="TailSpin" color="#007bff" height={50} width={50} />
           </div>
